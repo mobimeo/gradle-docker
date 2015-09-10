@@ -166,6 +166,12 @@ class DockerTask extends DefaultTask {
         instructions.add("EXPOSE ${port}")
     }
 
+    void label(Map labels) {
+        if(labels) {
+            instructions.add("LABEL "+ labels.collect { k,v -> "\"$k\"=\"$v\"" }.join(' '))
+        }
+    }
+
     void setEnvironment(String key, String value) {
         instructions.add("ENV ${key} ${value}")
     }

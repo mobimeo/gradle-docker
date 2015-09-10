@@ -65,6 +65,27 @@ class DockerTaskTest {
     }
 
     @Test
+    public void defineEmptyLabel() {
+        def task = createTask(createProject())
+        task.label([:])
+        assertThat 'LABEL', not(isIn(task.buildDockerfile().instructions))
+    }
+
+    @Test
+    public void defineLabel() {
+        def task = createTask(createProject())
+        task.label(foo: 'bar')
+        assertThat 'LABEL "foo"="bar"', isIn(task.buildDockerfile().instructions)
+    }
+
+    @Test
+    public void defineMultipleLabels() {
+        def task = createTask(createProject())
+        task.label(foo1: 'bar1', foo2: 'bar2')
+        assertThat 'LABEL "foo1"="bar1" "foo2"="bar2"', isIn(task.buildDockerfile().instructions)
+    }
+
+    @Test
     public void nonJavaDefaultBaseImage() {
         def project = createProject()
         def task = createTask(project)

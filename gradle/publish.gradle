@@ -1,5 +1,6 @@
 apply plugin: 'maven-publish'
 apply plugin: 'artifactory-publish'
+apply plugin: 'com.jfrog.bintray'
 
 publishing {
     publications {
@@ -70,5 +71,16 @@ artifactory {
         defaults {
             publications ('maven')
         }
+    }
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+    publications = ['maven']
+    pkg {
+        repo = 'maven'
+        name = project.name
+        userOrg = 'moovel'
     }
 }

@@ -34,7 +34,7 @@ apply plugin: 'docker'
 buildscript {
     repositories { jcenter() }
     dependencies {
-        classpath 'se.transmode.gradle:gradle-docker:1.2'
+        classpath 'se.transmode.gradle:gradle-docker:1.2.1'
     }
 }
 
@@ -67,6 +67,7 @@ The available instructions are:
 | `ENTRYPOINT`           | `entryPoint(List entryPoint)`
 | `ENV`                  | `setEnvironment(String key, String val)`
 | `EXPOSE`               | `exposePort(Integer port)`
+| `LABEL`                | `label(Map labels)`
 | `RUN`                  | `runCommand(String cmd)`
 | `VOLUME`               | `volume(String... paths)`
 | `WORKDIR`              | `workingDir(String dir)`
@@ -165,7 +166,7 @@ The plugin is built with Gradle 2.x and thus needs version 2.0 or higher to work
 buildscript {
     // ...
     dependencies {
-         classpath 'se.transmode.gradle:gradle-docker:1.2'
+         classpath 'se.transmode.gradle:gradle-docker:1.2.1'
          classpath 'org.codehaus.groovy:groovy-backports-compat23:2.3.5'
     }
 }
