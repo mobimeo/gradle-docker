@@ -34,7 +34,7 @@ apply plugin: 'docker'
 buildscript {
     repositories { jcenter() }
     dependencies {
-        classpath 'se.transmode.gradle:gradle-docker:1.2.1'
+        classpath 'se.transmode.gradle:gradle-docker:1.2.2'
     }
 }
 
@@ -71,6 +71,7 @@ The available instructions are:
 | `RUN`                  | `runCommand(String cmd)`
 | `VOLUME`               | `volume(String... paths)`
 | `WORKDIR`              | `workingDir(String dir)`
+| `USER`                 | `user(String user)`
 
 Instead of defining the build instructions inline in the task it is also possible to supply an **external Dockerfile**. If the task property `dockerfile` is set to the path of an existing Dockerfile the plugin will use this file instead to build the image.
 
@@ -166,7 +167,7 @@ The plugin is built with Gradle 2.x and thus needs version 2.0 or higher to work
 buildscript {
     // ...
     dependencies {
-         classpath 'se.transmode.gradle:gradle-docker:1.2.1'
+         classpath 'se.transmode.gradle:gradle-docker:1.2.2'
          classpath 'org.codehaus.groovy:groovy-backports-compat23:2.3.5'
     }
 }

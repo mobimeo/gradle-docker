@@ -172,6 +172,10 @@ class DockerTask extends DefaultTask {
         }
     }
 
+    void user(String usr) {
+        instructions.add("USER ${usr}")
+    }
+
     void setEnvironment(String key, String value) {
         instructions.add("ENV ${key} ${value}")
     }

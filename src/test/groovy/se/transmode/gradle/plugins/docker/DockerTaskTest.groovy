@@ -79,6 +79,13 @@ class DockerTaskTest {
     }
 
     @Test
+    public void defineUser() {
+        def task = createTask(createProject())
+        task.user('jim')
+        assertThat 'USER jim', isIn(task.buildDockerfile().instructions)
+    }
+
+    @Test
     public void defineMultipleLabels() {
         def task = createTask(createProject())
         task.label(foo1: 'bar1', foo2: 'bar2')
