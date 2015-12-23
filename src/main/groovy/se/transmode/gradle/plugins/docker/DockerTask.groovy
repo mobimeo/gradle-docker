@@ -131,6 +131,10 @@ class DockerTask extends DefaultTask {
         instructions.add("ADD ${tarFile.name} ${'/'}")
     }
 
+    void addUrl(String source, String destination='/') {
+        instructions.add("ADD ${source} ${destination}")
+    }
+
     void createTarArchive(File tarFile, Closure copySpec) {
         final tmpDir = Files.createTempDir()
         logger.info("Creating tar archive {} from {}", tarFile, tmpDir)

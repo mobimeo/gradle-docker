@@ -63,6 +63,7 @@ The available instructions are:
 | `ADD`                  | `addFile(Closure copySpec)`
 |                        | `addFile(String source, String dest)`
 |                        | `addFile(File source, String dest)`
+|                        | `addUrl(String source, String dest)`
 | `CMD`                  | `defaultCommand(List cmd)`
 | `ENTRYPOINT`           | `entryPoint(List entryPoint)`
 | `ENV`                  | `setEnvironment(String key, String val)`

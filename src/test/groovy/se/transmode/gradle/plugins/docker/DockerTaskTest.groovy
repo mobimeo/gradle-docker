@@ -127,6 +127,13 @@ class DockerTaskTest {
     }
 
     @Test
+    public void defineAddUrl() {
+        def task = createTask(createProject())
+        task.addUrl('http://foo/bar', '/baz')
+        assertThat 'ADD http://foo/bar /baz', isIn(task.buildDockerfile().instructions)
+    }
+
+    @Test
     public void testAddFileWithDir() {
         def project = createProject()
         def task = createTask(project)
