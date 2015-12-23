@@ -66,7 +66,7 @@ The available instructions are:
 | `CMD`                  | `defaultCommand(List cmd)`
 | `ENTRYPOINT`           | `entryPoint(List entryPoint)`
 | `ENV`                  | `setEnvironment(String key, String val)`
-| `EXPOSE`               | `exposePort(Integer port)`
+| `EXPOSE`               | `exposePort(String... port)`
 | `LABEL`                | `label(Map labels)`
 | `RUN`                  | `runCommand(String cmd)`
 | `VOLUME`               | `volume(String... paths)`

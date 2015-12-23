@@ -60,8 +60,8 @@ class DockerTaskTest {
     @Test
     public void defineExposePort() {
         def task = createTask(createProject())
-        task.exposePort(99)
-        assertThat "EXPOSE ${99}".toString(), isIn(task.buildDockerfile().instructions)
+        task.exposePort('99/UDP', '100')
+        assertThat 'EXPOSE 99/UDP 100', isIn(task.buildDockerfile().instructions)
     }
 
     @Test

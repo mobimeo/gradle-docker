@@ -5,7 +5,7 @@ apply plugin: 'docker'
 buildscript {
     repositories { mavenLocal(); jcenter() }
     dependencies {
-        classpath 'se.transmode.gradle:gradle-docker:1.2.2'
+        classpath 'se.transmode.gradle:gradle-docker:1.2.3'
     }
 }
 
@@ -24,5 +24,5 @@ dependencies {
 }
 
 distDocker {
-    exposePort 8080
+    exposePort '8080'
 }
