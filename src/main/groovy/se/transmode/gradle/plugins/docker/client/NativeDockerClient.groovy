@@ -41,6 +41,13 @@ class NativeDockerClient implements DockerClient {
         return executeAndWait(cmdLine)
     }
 
+    @Override
+    String saveImage(String tag, File outputFile) {
+        Preconditions.checkArgument(tag as Boolean,  "Image tag can not be empty or null.")
+        def cmdLine = "${binary} save -o ${outputFile.canonicalPath} ${tag}"
+        return executeAndWait(cmdLine)
+    }
+
     private static String executeAndWait(String cmdLine) {
         def process = cmdLine.execute()
         process.waitFor()

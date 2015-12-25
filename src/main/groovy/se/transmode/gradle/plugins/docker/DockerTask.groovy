@@ -23,7 +23,6 @@ import org.gradle.api.logging.Logging
 import org.gradle.api.tasks.TaskAction
 
 import se.transmode.gradle.plugins.docker.client.DockerClient
-import se.transmode.gradle.plugins.docker.client.JavaDockerClient
 import se.transmode.gradle.plugins.docker.client.NativeDockerClient
 import se.transmode.gradle.plugins.docker.image.Dockerfile
 
@@ -42,10 +41,6 @@ class DockerTask extends DefaultTask {
     String tag
     // Which version to use along with the tag (default: latest)
     String tagVersion
-    // Whether or not to execute docker to build the image (default: false)
-    Boolean dryRun
-    // Whether or not to push the image into the registry (default: false)
-    Boolean push
     // Hostname, port of the docker image registry unless Docker Registry Hub is used
     String registry
 
@@ -89,8 +84,6 @@ class DockerTask extends DefaultTask {
     // Tasks necessary to setup the stage before building an image
     def stageBacklog
     
-    // Should we use Docker's remote API instead of the docker executable
-    Boolean useApi
     // URL of the remote Docker host (default: localhost)
     String hostUrl
     // Docker remote API credentials
@@ -253,11 +246,18 @@ class DockerTask extends DefaultTask {
         tag = getImageTag()
         logger.info('Determining image tag: {}', tag)
 
-        if (!dryRun) {
+        if (!project.hasProperty('dockerDryRun')) {
             DockerClient client = getClient()
-            println client.buildImage(stageDir, tag)
-            if (push) {
-                println client.pushImage(tag)
+            logger.lifecycle(client.buildImage(stageDir, tag))
+            if (project.hasProperty('dockerSave')) {
+                String filename = 'dockerimage.tar';
+                File outputFile = new File(project.buildDir, filename)
+                logger.info("Saving $tag to $outputFile...")
+                logger.lifecycle(client.saveImage(tag, outputFile))
+            }
+            if (project.hasProperty('dockerPush')) {
+                logger.info("Pushing $tag...")
+                logger.lifecycle(client.pushImage(tag))
             }
         }
 
@@ -291,18 +291,6 @@ class DockerTask extends DefaultTask {
     }
 
     private DockerClient getClient() {
-        DockerClient client
-        if(getUseApi()) {
-            logger.info("Using the Docker remote API.")
-            client = JavaDockerClient.create(
-                    getHostUrl(),
-                    getApiUsername(),
-                    getApiPassword(),
-                    getApiEmail())
-        } else {
-            logger.info("Using the native docker binary.")
-            client = new NativeDockerClient(getDockerBinary())
-        }
-        return client
+        return new NativeDockerClient(getDockerBinary())
     }
 }

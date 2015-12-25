@@ -73,7 +73,6 @@ class DockerPlugin implements Plugin<Project> {
             maintainer = ''
             dockerBinary = DOCKER_BINARY
             registry = ''
-            useApi = Boolean.FALSE
             hostUrl = ''
             apiUsername = ''
             apiEmail = ''
@@ -97,7 +96,6 @@ class DockerPlugin implements Plugin<Project> {
             dockerBinary = { extension.dockerBinary }
             maintainer = { extension.maintainer }
             registry = { extension.registry }
-            useApi = { extension.useApi }
             hostUrl = { extension.hostUrl }
             apiUsername = { extension.apiUsername }
             apiPassword = { extension.apiPassword }

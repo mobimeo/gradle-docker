@@ -88,7 +88,6 @@ Configuration properties in the plugin extension `docker` are applied to all Doc
  - `baseImage` - The base docker image used when building images (i.e. the name after `FROM` in the Dockerfile).
  - `maintainer` - The name and email address of the image maintainer.
  - `registry` - The hostname and port of the Docker image registry unless the Docker Hub Registry is used.
- - `useApi` - Use the Docker Remote API instead of a locally installed `docker` binary. See [below](https://github.com/Transmode/gradle-docker/blob/master/README.md#docker-remote-api)
 
 Example to set the base docker image and maintainer name for all tasks:
 
@@ -125,41 +124,18 @@ task fooDocker(type: Docker) {
 }
 ```
 
+### Project options
+The plugin respects the following project properties:
+ - `dockerDryRun` - Only prepare the `{project.buildDir}/docker` folder but do not call the docker client
+ - `dockerPush` - After building the docker image push it to the registry
+ - `dockerSave` - After building the docker image save it into the file `{project.buildDir}/dockerimage.tar`
+
 ### A note about base images ###
 If no base image is configured through the extension or task property a suitable image is chosen based on the project's `targetCompatibility`. A project targeting Java 7 will for instance get a default base image with a Java 7 runtime.
 
-## Docker Remote API
-By default the plug-in will use the `docker` command line tool to execute any docker commands (such as `build` and `push`).  However, it can be configured to use the [Docker Remote API](https://docs.docker.com/reference/api/docker_remote_api/) instead via the `useApi` extension property:
-
-```gradle
-docker {
-    useApi true
-}
-```
-
-Use of the remote API requires that the Docker server be configured to listen over HTTP and that it have support for version 1.11 of the API (connecting over Unix Domain sockets is not supported yet).  The following configuration options are available:
-
-* `hostUrl` - set the URL used to contact the Docker server.  Defaults to `http://localhost:2375`
-* `apiUsername` - set the username used to authenticate the user with the Docker server.  Defaults to `nil` which means no authentication is performed.
-* `apiPassword` - set the password used to authenticate the user with the Docker server.
-* `apiEmail` - set the user's email used to authenticate the user with the Docker server.
-
-For example:
-
-```gradle
-docker {
-    useApi true
-    hostUrl 'http://myserver:4243'
-    apiUsername 'user'
-    apiPassword 'password'
-    apiEmail 'me@mycompany.com'
-}
-```
-
-
 ## Requirements
 * Gradle 2.x
-* Docker 0.11+
+* Docker 0.11+ installed locally
 
 #### Note to Gradle 1.x users
 The plugin is built with Gradle 2.x and thus needs version 2.0 or higher to work due to a newer version of Groovy included in Gradle 2.x (2.3 vs. 1.8.6). To use the plugin with Gradle 1.x you have to add Groovy's upward compatibility patch by adding the following line to your build file:
@@ -173,6 +149,3 @@ buildscript {
     }
 }
 ```
-
-#### Note to native docker client users
-If you are not using Docker's remote API (`useApi = false`, i.e. the default behaviour) you need to have Docker installed locally in order to build images. However if the `dryRun` task property is set to `true`  all calls to Docker are disabled. In that case only the Dockerfile and its context directory will be created.
