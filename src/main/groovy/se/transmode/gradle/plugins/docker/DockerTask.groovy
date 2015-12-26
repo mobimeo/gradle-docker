@@ -16,7 +16,7 @@
 package se.transmode.gradle.plugins.docker
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.io.Files
-
+import org.apache.commons.io.IOUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
@@ -25,6 +25,8 @@ import org.gradle.api.tasks.TaskAction
 import se.transmode.gradle.plugins.docker.client.DockerClient
 import se.transmode.gradle.plugins.docker.client.NativeDockerClient
 import se.transmode.gradle.plugins.docker.image.Dockerfile
+
+import java.util.zip.GZIPOutputStream
 
 class DockerTask extends DefaultTask {
 
@@ -254,6 +256,7 @@ class DockerTask extends DefaultTask {
                 File outputFile = new File(project.buildDir, filename)
                 logger.info("Saving $tag to $outputFile...")
                 logger.lifecycle(client.saveImage(tag, outputFile))
+                gzipFile(outputFile)
             }
             if (project.hasProperty('dockerPush')) {
                 logger.info("Pushing $tag...")
@@ -261,6 +264,19 @@ class DockerTask extends DefaultTask {
             }
         }
 
+    }
+
+    static void gzipFile(File source) {
+        assert source.isFile()
+        File archive = new File(source.path + '.gz')
+        new FileOutputStream(archive).withStream { OutputStream fileOutputStream ->
+            new GZIPOutputStream(fileOutputStream).withStream { OutputStream gzipOutputStream ->
+                new FileInputStream(source).withStream { InputStream fileInputStream ->
+                    IOUtils.copy(fileInputStream, gzipOutputStream)
+                }
+            }
+        }
+        source.delete()
     }
 
     private String getImageTag() {
